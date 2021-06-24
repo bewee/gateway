@@ -401,6 +401,7 @@ class Thing {
       // only attach the first time.
       if ((!prop.hasOwnProperty('attached') || !prop.attached) && prop.hasOwnProperty('detail')) {
         prop.detail.attach();
+        document.getElementById(prop.detail.id).classList.add('null-value');
         prop.attached = true;
       }
     }
@@ -503,15 +504,22 @@ class Thing {
    */
   updateProperty(name, value) {
     if (this.displayedProperties.hasOwnProperty(name)) {
+      const prop = this.displayedProperties[name];
+
       // Convert units, if necessary
       value = Units.convert(
         value,
-        this.displayedProperties[name].property.unit,
-        this.displayedProperties[name].convertedProperty.unit
+        prop.property.unit,
+        prop.convertedProperty.unit
       ).value;
 
       if (this.format === Constants.ThingFormat.EXPANDED) {
-        this.displayedProperties[name].detail.update(value);
+        if(typeof value === 'undefined' || value === null) {
+          document.getElementById(prop.detail.id).classList.add('null-value');
+        } else {
+          document.getElementById(prop.detail.id).classList.remove('null-value');
+        }
+        prop.detail.update(value);
       }
     }
 
@@ -784,9 +792,6 @@ class Thing {
       }
 
       const value = data[prop];
-      if (typeof value === 'undefined' || value === null) {
-        continue;
-      }
 
       this.updateProperty(prop, value);
     }

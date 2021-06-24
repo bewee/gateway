@@ -261,9 +261,6 @@ class ThingModel extends Model {
       }
 
       const value = data[prop];
-      if (typeof value === 'undefined' || value === null) {
-        continue;
-      }
 
       this.properties[prop] = value;
       updatedProperties[prop] = value;

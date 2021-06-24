@@ -390,3 +390,7 @@
   height: 12.8rem;
   border-right: 0.2rem dashed white;
 }
+
+.null-value {
+  background: red;
+}
