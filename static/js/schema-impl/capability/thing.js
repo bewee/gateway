@@ -507,11 +507,7 @@ class Thing {
       const prop = this.displayedProperties[name];
 
       // Convert units, if necessary
-      value = Units.convert(
-        value,
-        prop.property.unit,
-        prop.convertedProperty.unit
-      ).value;
+      value = Units.convert(value, prop.property.unit, prop.convertedProperty.unit).value;
 
       if (this.format === Constants.ThingFormat.EXPANDED) {
         prop.detail.update(value);

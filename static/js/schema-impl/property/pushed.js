@@ -38,7 +38,9 @@ class PushedDetail extends StringLabelDetail {
     if (typeof value === 'undefined' || value === null) {
       this.labelElement.value = null;
     } else {
-      this.labelElement.value = value ? fluent.getMessage('pushed') : fluent.getMessage('not-pushed');
+      this.labelElement.value = value
+        ? fluent.getMessage('pushed')
+        : fluent.getMessage('not-pushed');
       this.labelElement.inverted = value;
     }
   }
