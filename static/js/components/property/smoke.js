@@ -51,6 +51,19 @@ class SmokeProperty extends BaseComponent {
       text-transform: uppercase;
     }
 
+    .webthing-smoke-property-value.null-value::before {
+      content: '...';
+      font-size: initial;
+    }
+
+    .webthing-smoke-property-value.null-value {
+      font-size: 0px;
+    }
+
+    .webthing-smoke-property-value.null-value > * {
+      display: none;
+    }
+
     .webthing-smoke-property-container.inverted
     .webthing-smoke-property-value {
       top: calc(50% + 1.7rem);
@@ -117,17 +130,22 @@ class SmokeProperty extends BaseComponent {
   }
 
   set value(value) {
-    this._smoke = Boolean(value);
-
-    if (value === null) {
-      this._value.innerText = fluent.getMessage('ellipsis');
-      this._container.classList.remove('inverted');
-    } else if (this._smoke) {
-      this._value.innerText = fluent.getMessage('smoke');
-      this._container.classList.add('inverted');
+    if (typeof value === 'undefined' || value === null) {
+      this._value.classList.add('null-value');
     } else {
-      this._value.innerText = fluent.getMessage('ok');
-      this._container.classList.remove('inverted');
+      this._value.classList.remove('null-value');
+      this._smoke = Boolean(value);
+
+      if (value === null) {
+        this._value.innerText = fluent.getMessage('ellipsis');
+        this._container.classList.remove('inverted');
+      } else if (this._smoke) {
+        this._value.innerText = fluent.getMessage('smoke');
+        this._container.classList.add('inverted');
+      } else {
+        this._value.innerText = fluent.getMessage('ok');
+        this._container.classList.remove('inverted');
+      }
     }
   }
 }

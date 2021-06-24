@@ -40,6 +40,14 @@ class NumericLabelProperty extends BaseComponent {
       transform: translate(-50%, -50%);
     }
 
+    .webthing-numeric-label-property-contents.null-value::before {
+      content: '...';
+    }
+
+    .webthing-numeric-label-property-contents.null-value > * {
+      display: none;
+    }
+
     .webthing-numeric-label-property-value,
     .webthing-numeric-label-property-unit {
       font-weight: bold;
@@ -64,6 +72,7 @@ class NumericLabelProperty extends BaseComponent {
 `;
     super(template);
 
+    this._contents = this.shadowRoot.querySelector('.webthing-numeric-label-property-contents');
     this._name = this.shadowRoot.querySelector('.webthing-numeric-label-property-name');
     this._value = this.shadowRoot.querySelector('.webthing-numeric-label-property-value');
     this._unit = this.shadowRoot.querySelector('.webthing-numeric-label-property-unit');
@@ -97,12 +106,21 @@ class NumericLabelProperty extends BaseComponent {
   }
 
   get value() {
+    if (this._contents.classList.contains('null-value')) {
+      return null;
+    }
     return this._value.innerText;
   }
 
   set value(value) {
-    value = Number(value);
-    this._value.innerText = value.toFixed(this.precision);
+    if (typeof value === 'undefined' || value === null) {
+      this._contents.classList.add('null-value');
+    } else {
+      this._contents.classList.remove('null-value');
+
+      value = Number(value);
+      this._value.innerText = value.toFixed(this.precision);
+    }
   }
 
   get unit() {

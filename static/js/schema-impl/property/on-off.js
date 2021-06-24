@@ -38,6 +38,10 @@ class OnOffDetail {
   }
 
   update(on) {
+    if (!this.input || on === this.input.checked) {
+      return;
+    }
+
     this.input.checked = on;
   }
 

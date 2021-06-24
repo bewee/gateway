@@ -45,7 +45,11 @@ class NumericLabelDetail {
       return;
     }
 
-    this.labelElement.value = parseFloat(value) || 0;
+    if (typeof value === 'undefined' || value === null) {
+      this.labelElement.value = null;
+    } else {
+      this.labelElement.value = parseFloat(value) || 0;
+    }
   }
 }
 

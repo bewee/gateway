@@ -401,7 +401,7 @@ class Thing {
       // only attach the first time.
       if ((!prop.hasOwnProperty('attached') || !prop.attached) && prop.hasOwnProperty('detail')) {
         prop.detail.attach();
-        document.getElementById(prop.detail.id).classList.add('null-value');
+        prop.detail.update(null);
         prop.attached = true;
       }
     }
@@ -514,11 +514,6 @@ class Thing {
       ).value;
 
       if (this.format === Constants.ThingFormat.EXPANDED) {
-        if(typeof value === 'undefined' || value === null) {
-          document.getElementById(prop.detail.id).classList.add('null-value');
-        } else {
-          document.getElementById(prop.detail.id).classList.remove('null-value');
-        }
         prop.detail.update(value);
       }
     }

@@ -40,6 +40,14 @@ class EnumProperty extends BaseComponent {
       transform: translate(-50%, -50%);
     }
 
+    .webthing-enum-property-contents.null-value::before {
+      content: '...';
+    }
+
+    .webthing-enum-property-contents.null-value > * {
+      display: none;
+    }
+
     .webthing-enum-property-select {
       height: 3rem;
       width: 7rem;
@@ -82,6 +90,7 @@ class EnumProperty extends BaseComponent {
 `;
     super(template);
 
+    this._contents = this.shadowRoot.querySelector('.webthing-enum-property-contents');
     this._select = this.shadowRoot.querySelector('.webthing-enum-property-select');
     this._unit = this.shadowRoot.querySelector('.webthing-enum-property-unit');
     this._name = this.shadowRoot.querySelector('.webthing-enum-property-name');
@@ -113,6 +122,9 @@ class EnumProperty extends BaseComponent {
   }
 
   get value() {
+    if (this._contents.classList.contains('null-value')) {
+      return null;
+    }
     if (this._select.options.length === 0) {
       return '';
     }
@@ -131,8 +143,14 @@ class EnumProperty extends BaseComponent {
   }
 
   set value(value) {
-    value = `${value}`;
-    this._select.value = value;
+    if (typeof value === 'undefined' || value === null) {
+      this._contents.classList.add('null-value');
+    } else {
+      this._contents.classList.remove('null-value');
+
+      value = `${value}`;
+      this._select.value = value;
+    }
   }
 
   get readOnly() {

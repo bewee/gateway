@@ -40,6 +40,14 @@ class ColorProperty extends BaseComponent {
       transform: translate(-50%, -50%);
     }
 
+    .webthing-color-property-contents.null-value::before {
+      content: '...';
+    }
+
+    .webthing-color-property-contents.null-value > * {
+      display: none;
+    }
+
     .webthing-color-property-name {
       text-align: center;
       max-width: 10rem;
@@ -57,6 +65,7 @@ class ColorProperty extends BaseComponent {
 `;
     super(template);
 
+    this._contents = this.shadowRoot.querySelector('.webthing-color-property-contents');
     this._input = this.shadowRoot.querySelector('.webthing-color-property-color');
     this._name = this.shadowRoot.querySelector('.webthing-color-property-name');
 
@@ -83,11 +92,19 @@ class ColorProperty extends BaseComponent {
   }
 
   get value() {
+    if (this._contents.classList.contains('null-value')) {
+      return null;
+    }
     return this._input.value;
   }
 
   set value(value) {
-    this._input.value = value;
+    if (typeof value === 'undefined' || value === null) {
+      this._contents.classList.add('null-value');
+    } else {
+      this._contents.classList.remove('null-value');
+      this._input.value = value;
+    }
   }
 
   get readOnly() {

@@ -40,6 +40,14 @@ class BooleanProperty extends BaseComponent {
       transform: translate(-50%, -50%);
     }
 
+    .webthing-boolean-property-contents.null-value::before {
+      content: '...';
+    }
+
+    .webthing-boolean-property-contents.null-value > * {
+      display: none;
+    }
+
     .webthing-boolean-property-checkbox {
       display: none;
     }
@@ -85,6 +93,7 @@ class BooleanProperty extends BaseComponent {
   <div id="name-${BaseComponent.count}" class="webthing-boolean-property-name"></div>
 `;
     super(template);
+    this._contents = this.shadowRoot.querySelector('.webthing-boolean-property-contents');
     this._input = this.shadowRoot.querySelector('.webthing-boolean-property-checkbox');
     this._name = this.shadowRoot.querySelector('.webthing-boolean-property-name');
 
@@ -110,18 +119,27 @@ class BooleanProperty extends BaseComponent {
   }
 
   get checked() {
+    if (this._contents.classList.contains('null-value')) {
+      return null;
+    }
     return this._input.hasAttribute('checked');
   }
 
   set checked(value) {
-    const isChecked = Boolean(value);
-    if (isChecked) {
-      this._input.setAttribute('checked', '');
+    if (typeof value === 'undefined' || value === null) {
+      this._contents.classList.add('null-value');
     } else {
-      this._input.removeAttribute('checked');
-    }
+      this._contents.classList.remove('null-value');
 
-    this._input.checked = isChecked;
+      const isChecked = Boolean(value);
+      if (isChecked) {
+        this._input.setAttribute('checked', '');
+      } else {
+        this._input.removeAttribute('checked');
+      }
+
+      this._input.checked = isChecked;
+    }
   }
 
   get readOnly() {

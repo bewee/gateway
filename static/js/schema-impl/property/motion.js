@@ -35,8 +35,12 @@ class MotionDetail extends StringLabelDetail {
       return;
     }
 
-    this.labelElement.value = value ? fluent.getMessage('motion') : fluent.getMessage('no-motion');
-    this.labelElement.inverted = value;
+    if (typeof value === 'undefined' || value === null) {
+      this.labelElement.value = null;
+    } else {
+      this.labelElement.value = value ? fluent.getMessage('motion') : fluent.getMessage('no-motion');
+      this.labelElement.inverted = value;
+    }
   }
 }
 

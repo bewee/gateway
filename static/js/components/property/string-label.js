@@ -52,6 +52,19 @@ class StringLabelProperty extends BaseComponent {
       text-transform: uppercase;
     }
 
+    .webthing-string-label-property-value.null-value::before {
+      content: '...';
+      font-size: initial;
+    }
+
+    .webthing-string-label-property-value.null-value {
+      font-size: 0px;
+    }
+
+    .webthing-string-label-property-value.null-value > * {
+      display: none;
+    }
+
     .webthing-string-label-property-name {
       text-align: center;
       max-width: 10rem;
@@ -99,11 +112,19 @@ class StringLabelProperty extends BaseComponent {
   }
 
   get value() {
+    if (this._value.classList.contains('null-value')) {
+      return null;
+    }
     return this._value.innerText;
   }
 
   set value(value) {
-    this._value.innerText = value;
+    if (typeof value === 'undefined' || value === null) {
+      this._value.classList.add('null-value');
+    } else {
+      this._value.classList.remove('null-value');
+      this._value.innerText = value;
+    }
   }
 
   get inverted() {

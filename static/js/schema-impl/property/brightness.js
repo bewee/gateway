@@ -60,10 +60,6 @@ class BrightnessDetail {
   }
 
   update(brightness) {
-    if (!this.brightness) {
-      return;
-    }
-
     this.brightness.value = brightness;
   }
 

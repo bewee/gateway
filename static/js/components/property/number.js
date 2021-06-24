@@ -40,6 +40,14 @@ class NumberProperty extends BaseComponent {
       transform: translate(-50%, -50%);
     }
 
+    .webthing-number-property-contents.null-value::before {
+      content: '...';
+    }
+
+    .webthing-number-property-contents.null-value > * {
+      display: none;
+    }
+
     .webthing-number-property-contents.one-line {
       left: 5rem;
       width: 100%;
@@ -174,24 +182,32 @@ class NumberProperty extends BaseComponent {
   }
 
   get value() {
+    if (this._contents.classList.contains('null-value')) {
+      return null;
+    }
     return this._input.value;
   }
 
   set value(value) {
-    let step = this.step;
-    if (step !== '' && step !== 'any') {
-      step = parseFloat(step);
-      value = Math.round(value / step) * step;
+    if (typeof value === 'undefined' || value === null) {
+      this._contents.classList.add('null-value');
+    } else {
+      this._contents.classList.remove('null-value');
+      let step = this.step;
+      if (step !== '' && step !== 'any') {
+        step = parseFloat(step);
+        value = Math.round(value / step) * step;
 
-      let precision = 0;
-      if (`${step}`.includes('.')) {
-        precision = `${step}`.split('.')[1].length;
+        let precision = 0;
+        if (`${step}`.includes('.')) {
+          precision = `${step}`.split('.')[1].length;
+        }
+
+        value = value.toFixed(precision);
       }
 
-      value = value.toFixed(precision);
+      this._input.value = value;
     }
-
-    this._input.value = value;
   }
 
   get readOnly() {

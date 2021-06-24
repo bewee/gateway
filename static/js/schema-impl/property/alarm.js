@@ -54,7 +54,7 @@ class AlarmDetail extends StringLabelDetail {
       this.labelElement.value = value ? 'ALARM' : 'OK';
       this.labelElement.inverted = value;
     } else {
-      if (value == this.input.checked) {
+      if (value === this.input.checked) {
         return;
       }
 

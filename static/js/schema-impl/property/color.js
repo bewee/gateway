@@ -36,10 +36,6 @@ class ColorDetail {
   }
 
   update(color) {
-    if (!this.color) {
-      return;
-    }
-
     this.color.value = color;
   }
 

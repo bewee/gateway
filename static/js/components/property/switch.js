@@ -40,6 +40,14 @@ class SwitchProperty extends BaseComponent {
       transform: translate(-50%, -50%);
     }
 
+    .webthing-switch-property-contents.null-value::before {
+      content: '...';
+    }
+
+    .webthing-switch-property-contents.null-value > * {
+      display: none;
+    }
+
     .webthing-switch-property-switch {
       display: none;
     }
@@ -102,6 +110,7 @@ class SwitchProperty extends BaseComponent {
 `;
     super(template);
 
+    this._contents = this.shadowRoot.querySelector('.webthing-switch-property-contents');
     this._input = this.shadowRoot.querySelector('.webthing-switch-property-switch');
     this._name = this.shadowRoot.querySelector('.webthing-switch-property-name');
     this._label = this.shadowRoot.querySelector('.webthing-switch-property-label');
@@ -133,19 +142,28 @@ class SwitchProperty extends BaseComponent {
   }
 
   get checked() {
+    if (this._contents.classList.contains('null-value')) {
+      return null;
+    }
     return this._input.hasAttribute('checked');
   }
 
   set checked(value) {
-    const isChecked = Boolean(value);
-    if (isChecked) {
-      this._input.setAttribute('checked', '');
+    if (typeof value === 'undefined' || value === null) {
+      this._contents.classList.add('null-value');
     } else {
-      this._input.removeAttribute('checked');
-    }
+      this._contents.classList.remove('null-value');
 
-    this._input.checked = isChecked;
-    this._label.innerText = isChecked ? this.onLabel : this.offLabel;
+      const isChecked = Boolean(value);
+      if (isChecked) {
+        this._input.setAttribute('checked', '');
+      } else {
+        this._input.removeAttribute('checked');
+      }
+
+      this._input.checked = isChecked;
+      this._label.innerText = isChecked ? this.onLabel : this.offLabel;
+    }
   }
 
   get readOnly() {

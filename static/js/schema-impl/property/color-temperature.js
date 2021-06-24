@@ -49,10 +49,6 @@ class ColorTemperatureDetail {
   }
 
   update(temperature) {
-    if (!this.temperature) {
-      return;
-    }
-
     this.temperature.value = temperature;
   }
 

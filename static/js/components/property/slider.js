@@ -39,6 +39,14 @@ class SliderProperty extends BaseComponent {
       left: 50%;
       transform: translate(-50%, -50%);
     }
+    
+    .webthing-slider-property-contents.null-value::before {
+      content: '...';
+    }
+
+    .webthing-slider-property-contents.null-value > * {
+      display: none;
+    }
 
     .webthing-slider-property-form {
       width: 8rem;
@@ -71,6 +79,7 @@ class SliderProperty extends BaseComponent {
 `;
     super(template);
 
+    this._contents = this.shadowRoot.querySelector('.webthing-slider-property-contents');
     this._input = this.shadowRoot.querySelector('.webthing-slider-property-slider');
     this._name = this.shadowRoot.querySelector('.webthing-slider-property-name');
 
@@ -122,11 +131,19 @@ class SliderProperty extends BaseComponent {
   }
 
   get value() {
+    if (this._contents.classList.contains('null-value')) {
+      return null;
+    }
     return this._input.value;
   }
 
   set value(value) {
-    this._input.value = value;
+    if (typeof value === 'undefined' || value === null) {
+      this._contents.classList.add('null-value');
+    } else {
+      this._contents.classList.remove('null-value');
+      this._input.value = value;
+    }
   }
 
   get readOnly() {

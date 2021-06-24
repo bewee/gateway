@@ -40,6 +40,14 @@ class LevelProperty extends BaseComponent {
       transform: translate(-50%, -50%);
     }
 
+    .webthing-level-property-contents.null-value::before {
+      content: '...';
+    }
+
+    .webthing-level-property-contents.null-value > * {
+      display: none;
+    }
+
     .webthing-level-property-bar-container {
       width: 8rem;
       height: 1rem;
@@ -123,6 +131,7 @@ class LevelProperty extends BaseComponent {
 `;
     super(template);
 
+    this._contents = this.shadowRoot.querySelector('.webthing-level-property-contents');
     this._text = this.shadowRoot.querySelector('.webthing-level-property-text');
     this._barContainer = this.shadowRoot.querySelector('.webthing-level-property-bar-container');
     this._bar = this.shadowRoot.querySelector('.webthing-level-property-bar');
@@ -204,25 +213,34 @@ class LevelProperty extends BaseComponent {
   }
 
   get value() {
+    if (this._contents.classList.contains('null-value')) {
+      return null;
+    }
     return this._slider.value;
   }
 
   set value(value) {
-    value = Number(value);
+    if (typeof value === 'undefined' || value === null) {
+      this._contents.classList.add('null-value');
+    } else {
+      this._contents.classList.remove('null-value');
 
-    const min = parseInt(this.min, 10);
-    const max = parseInt(this.max, 10) - min;
-    const percent = (Math.max(0, value - min) / max) * 100;
+      value = Number(value);
 
-    if (this.precision !== null) {
-      value = value.toFixed(this.precision);
+      const min = parseInt(this.min, 10);
+      const max = parseInt(this.max, 10) - min;
+      const percent = (Math.max(0, value - min) / max) * 100;
+
+      if (this.precision !== null) {
+        value = value.toFixed(this.precision);
+      }
+
+      this._bar.style.width = `calc(${percent}% - 0.2rem)`;
+      this._text.innerText = value;
+      this._text.title = value;
+      this._slider.value = value;
+      this._number.value = value;
     }
-
-    this._bar.style.width = `calc(${percent}% - 0.2rem)`;
-    this._text.innerText = value;
-    this._text.title = value;
-    this._slider.value = value;
-    this._number.value = value;
   }
 
   get readOnly() {

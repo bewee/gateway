@@ -48,8 +48,11 @@ class ColorModeDetail extends EnumDetail {
       if (!this.labelElement) {
         return;
       }
-
-      this.labelElement.value = `${value}`.toUpperCase();
+      if (typeof value === 'undefined' || value === null) {
+        this.labelElement.value = null;
+      } else {
+        this.labelElement.value = `${value}`.toUpperCase();
+      }
     } else {
       super.update(value);
     }

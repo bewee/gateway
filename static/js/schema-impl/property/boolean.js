@@ -45,7 +45,7 @@ class BooleanDetail {
    * Update the detail view with the new property value.
    */
   update(bool) {
-    if (!this.input || bool == this.input.checked) {
+    if (!this.input || bool === this.input.checked) {
       return;
     }
 

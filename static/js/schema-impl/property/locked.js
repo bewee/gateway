@@ -35,12 +35,16 @@ class LockedDetail extends StringLabelDetail {
       return;
     }
 
-    if (!['locked', 'unlocked', 'unknown', 'jammed'].includes(value)) {
-      value = 'unknown';
-    }
+    if (typeof value === 'undefined' || value === null) {
+      this.labelElement.value = null;
+    } else {
+      if (!['locked', 'unlocked', 'unknown', 'jammed'].includes(value)) {
+        value = 'unknown';
+      }
 
-    this.labelElement.value = fluent.getMessage(value);
-    this.labelElement.inverted = value !== 'locked';
+      this.labelElement.value = fluent.getMessage(value);
+      this.labelElement.inverted = value !== 'locked';
+    }
   }
 }
 
